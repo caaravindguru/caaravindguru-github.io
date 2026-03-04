@@ -207,7 +207,31 @@ input[type=checkbox]{accent-color:var(--ac);width:12px;height:12px;cursor:pointe
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--s1)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 @media(max-width:650px){.dg,.sg{grid-template-columns:1fr}.toolbar{flex-direction:column}.si{width:100%}}
 </style>
-<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+<script>
+// Load MSAL with fallback CDNs
+(function() {
+  var cdns = [
+    'https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js',
+    'https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js',
+    'https://unpkg.com/@azure/msal-browser@2.38.3/lib/msal-browser.min.js'
+  ];
+  var idx = 0;
+  function loadNext() {
+    if (idx >= cdns.length) {
+      document.getElementById('loginErr').textContent = 'Failed to load Microsoft auth library. Check your internet connection and refresh.';
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = cdns[idx++];
+    s.onload = function() {
+      document.dispatchEvent(new Event('msalReady'));
+    };
+    s.onerror = loadNext;
+    document.head.appendChild(s);
+  }
+  loadNext();
+})();
+</script>
 </head>
 <body>
 
@@ -440,6 +464,9 @@ let accessToken = null;
 async function signIn() {
   document.getElementById('loginErr').textContent = '';
   try {
+    await msalInstance.initialize();
+  } catch(e) {}
+  try {
     const resp = await msalInstance.loginPopup({ scopes: SCOPES });
     currentUser = resp.account;
     accessToken = resp.accessToken;
@@ -468,7 +495,16 @@ async function signOut() {
 }
 
 async function tryAutoSignIn() {
-  await msalInstance.initialize();
+  try { await msalInstance.initialize(); } catch(e) {}
+  try {
+    const resp = await msalInstance.handleRedirectPromise();
+    if (resp && resp.account) {
+      currentUser = resp.account;
+      accessToken = resp.accessToken;
+      await onSignedIn();
+      return;
+    }
+  } catch(e) {}
   const accounts = msalInstance.getAllAccounts();
   if (accounts.length > 0) {
     currentUser = accounts[0];
@@ -476,9 +512,7 @@ async function tryAutoSignIn() {
       const resp = await msalInstance.acquireTokenSilent({ scopes: SCOPES, account: accounts[0] });
       accessToken = resp.accessToken;
       await onSignedIn();
-    } catch(e) {
-      // Show login screen
-    }
+    } catch(e) {}
   }
 }
 
@@ -1087,7 +1121,13 @@ function showToast(msg,col){let t=document.getElementById('toast');if(!t){t=docu
 // ══════════════════════════════════════════
 //  INIT — try silent sign-in first
 // ══════════════════════════════════════════
-tryAutoSignIn();
+document.addEventListener('msalReady', tryAutoSignIn);
+// Also try on DOMContentLoaded in case script already loaded
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    if (typeof msal !== 'undefined') tryAutoSignIn();
+  }, 500);
+});
 </script>
 </body>
 </html>
