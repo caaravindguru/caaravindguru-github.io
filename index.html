@@ -419,7 +419,8 @@ var st,ct,ut,lt,dt,ht,pt,gt,ft,mt=function(){function t(e,t,r){this.networkInter
   <h2>Select Financial Year</h2>
   <div id="fyList" style="margin:12px 0"></div>
   <div class="ma"><button class="btn bo" onclick="closeMo()">Close</button></div>
-</div></div><div class="md" style="max-width:340px">
+</div></div>
+<div class="mo" id="passModal"><div class="md" style="max-width:340px">
   <h2>Settings Access</h2>
   <p style="color:var(--mu);font-size:13px;margin-bottom:12px">Enter the settings password to continue.</p>
   <label class="fl">Password</label><input class="fi" id="passInput" type="password" placeholder="Enter password..." onkeydown="if(event.key==='Enter')checkSettingsPassword()"/>
@@ -964,6 +965,13 @@ function showPage(p) {
 //  DASHBOARD
 // ══════════════════════════════════════════
 function renderDash(){
+  // Set default period to previous month if not yet changed
+  const dPT = document.getElementById('dPT');
+  if(dPT && !dPT._defaultSet) {
+    const defIdx = getDefaultPeriod();
+    dPT.value = 'M|' + defIdx;
+    dPT._defaultSet = true;
+  }
   const rt=document.getElementById('dRT').value;
   const[pt,piS]=document.getElementById('dPT').value.split('|');const pi=parseInt(piS);
   const per=pt==='M'?MP[pi]:QP[pi];const qEnd=isQEnd(pt,pi);
