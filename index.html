@@ -684,7 +684,7 @@ async function loadAllData() {
     (fData.value || []).forEach(item => {
       const f = item.fields;
       const key = f.ClientSPId + '|' + f.ReturnType + '|' + f.PeriodId;
-      filingMap[key] = { spId: item.id, st: f.Status || '', dr: f.DataReceived || 'No', drTs: f.DataRecvTimestamp || '', dof: f.DateFiled || '', rem: f.Remarks || '' };
+      filingMap[key] = { spId: item.id, st: f.FilingStatus || '', dr: f.DataReceived || 'No', drTs: f.DataRecvTimestamp || '', dof: f.DateFiled || '', rem: f.FilingRemarks || '' };
     });
     if (fData['@odata.nextLink']) { filingUrl = fData['@odata.nextLink'].replace(GRAPH, ''); }
     else hasMore = false;
@@ -755,11 +755,11 @@ async function spSaveFiling(clientSPId, rt, pid, data) {
     ClientSPId: parseInt(clientSPId) || clientSPId,
     ReturnType: rt,
     PeriodId: pid,
-    Status: data.st,
+    FilingStatus: data.st,
     DataReceived: data.dr,
     DataRecvTimestamp: data.drTs || '',
     DateFiled: data.dof || '',
-    Remarks: data.rem || '',
+    FilingRemarks: data.rem || '',
   };
   if (filingMap[key] && filingMap[key].spId) {
     await graphRequest('PATCH', '/sites/' + siteId + '/lists/' + listIds.Filings + '/items/' + filingMap[key].spId, { fields });
