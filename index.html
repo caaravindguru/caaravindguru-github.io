@@ -27,9 +27,11 @@ const CONFIG = {
 </script>
 
 <style>
-:root{--bg:#f0f4fa;--s1:#ffffff;--s2:#f8fafd;--s3:#edf1f8;--bd:#ccd6e8;--bd2:#b0bfd6;--ac:#2563eb;--ac2:#059669;--ac3:#d97706;--ac4:#dc2626;--tx:#1a2540;--mu:#5a6a85;--mu2:#8394aa;--r:8px}
+:root{--bg:#e8edf5;--s1:#f4f7fb;--s2:#edf1f8;--s3:#e2e8f2;--bd:#c2cede;--bd2:#a8bace;--ac:#2563eb;--ac2:#059669;--ac3:#d97706;--ac4:#dc2626;--tx:#1a2540;--mu:#5a6a85;--mu2:#8394aa;--r:8px;--nav-bg:rgba(232,237,245,.97)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:18px;transition:background .25s,color .25s}
+/* ── DARK MODE ── */
+body.dark{--bg:#090d13;--s1:#0f1420;--s2:#151c2a;--s3:#1c2535;--bd:#222e42;--bd2:#2d3f5a;--ac:#5b8df0;--ac2:#34d399;--ac3:#f59e0b;--ac4:#f87171;--tx:#d8e3f5;--mu:#556278;--mu2:#38485e;--nav-bg:rgba(9,13,19,.97)}
 /* ── LOGIN SCREEN ── */
 .login-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0}
 .login-card{background:var(--s2);border:1px solid var(--bd2);border-radius:16px;padding:40px 48px;text-align:center;max-width:380px;width:90%}
@@ -51,11 +53,11 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 /* ── NAV ── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:2px;flex-wrap:wrap}
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:2px;flex-wrap:wrap}
 .nb{font-weight:900;font-size:14px;padding:12px 14px 12px 0;border-right:1px solid var(--bd);margin-right:4px;white-space:nowrap;letter-spacing:-.3px}
 .nb span{color:var(--ac)}
 .nb-sp{font-size:8px;background:rgba(0,120,212,.2);color:#0078d4;border:1px solid rgba(0,120,212,.3);border-radius:10px;padding:1px 6px;margin-left:6px;font-weight:700;letter-spacing:.3px}
-.nt{padding:12px 12px;font-size:13px;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.nt{padding:12px 12px;font-size:16px;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
 .nt:hover{color:var(--tx)}.nt.on{color:var(--ac);border-bottom-color:var(--ac)}
 .nr{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .fy{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#090d13;font-weight:900;font-size:9px;padding:3px 8px;border-radius:20px;letter-spacing:.5px}
@@ -65,7 +67,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 .page{display:none;padding:16px 14px 50px;max-width:1400px;margin:0 auto}
 .page.on{display:block}
 /* ── BUTTONS ── */
-.btn{border:none;border-radius:var(--r);padding:7px 14px;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px}
+.btn{border:none;border-radius:var(--r);padding:7px 14px;font-weight:700;font-size:16px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px}
 .btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:default}
 .bp{background:var(--ac);color:#fff}.bg2{background:var(--ac2);color:#090d13}
 .bo{background:transparent;border:1px solid var(--bd2);color:var(--mu);font-size:10px}
@@ -73,8 +75,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 .bdd{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:var(--ac4);font-size:10px}
 .bsave{background:linear-gradient(135deg,var(--ac2),#059669);color:#090d13;font-weight:800}
 /* ── LAYOUT ── */
-.ph{font-weight:900;font-size:22px;margin-bottom:2px;letter-spacing:-.3px}
-.ps{color:var(--mu);font-size:13px;margin-bottom:14px}
+.ph{font-weight:900;font-size:25px;margin-bottom:2px;letter-spacing:-.3px}
+.ps{color:var(--mu);font-size:16px;margin-bottom:14px}
 .dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .dw{grid-column:1/-1}
 .card{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px}
@@ -110,7 +112,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 .pt.on{background:var(--s2);border-color:var(--ac2);color:var(--ac2)}
 .pt:hover:not(.on){color:var(--tx);border-color:var(--mu2)}
 .toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
-.si{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 10px;color:var(--tx);font-size:14px;outline:none;min-width:160px;flex:1;transition:border-color .2s}
+.si{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 10px;color:var(--tx);font-size:17px;outline:none;min-width:160px;flex:1;transition:border-color .2s}
 .si:focus{border-color:var(--ac)}.si::placeholder{color:var(--mu)}
 .sel{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:6px 22px 6px 8px;color:var(--tx);font-size:10px;outline:none;cursor:pointer;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23556278'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center}
 .sel:focus{border-color:var(--ac)}
@@ -120,9 +122,9 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);min-h
 .cbulk.on{display:flex}.cbl{font-size:10px;color:var(--ac4);flex:1}
 /* ── TABLE ── */
 .tw{background:var(--s2);border:1px solid var(--bd);border-radius:10px;overflow:auto;position:relative}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:980px}
+table{width:100%;border-collapse:collapse;font-size:16px;min-width:980px}
 thead{position:sticky;top:0;z-index:10}thead tr{background:var(--s1)}
-th{padding:8px 10px;text-align:left;font-size:11px;letter-spacing:1px;color:var(--mu);text-transform:uppercase;border-bottom:1px solid var(--bd);white-space:nowrap;cursor:pointer;user-select:none}
+th{padding:8px 10px;text-align:left;font-size:13px;letter-spacing:1px;color:var(--mu);text-transform:uppercase;border-bottom:1px solid var(--bd);white-space:nowrap;cursor:pointer;user-select:none}
 th:hover{color:var(--tx)}
 td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle;white-space:nowrap}
 tr:last-child td{border-bottom:none}tr:hover td{background:rgba(91,141,240,.03)}
@@ -131,7 +133,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(91,141,240,.03)}
 .fM{background:rgba(91,141,240,.15);color:var(--ac)}.fQ{background:rgba(52,211,153,.15);color:var(--ac2)}
 .bb{font-size:8px;padding:2px 5px;border-radius:3px;background:rgba(167,139,250,.12);color:#a78bfa}
 /* ── STATUS PILLS ── */
-.sp{display:inline-flex;align-items:center;gap:3px;padding:4px 9px;border-radius:9px;font-size:11px;font-weight:600;border:1px solid transparent;white-space:nowrap;cursor:pointer}
+.sp{display:inline-flex;align-items:center;gap:3px;padding:4px 9px;border-radius:9px;font-size:14px;font-weight:600;border:1px solid transparent;white-space:nowrap;cursor:pointer}
 .sp:hover{opacity:.8}.sp .d{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .s0{background:rgba(85,98,120,.1);color:#556278;border-color:rgba(85,98,120,.2)}.s0 .d{background:#556278}
 .s1c{background:rgba(91,141,240,.1);color:var(--ac);border-color:rgba(91,141,240,.25)}.s1c .d{background:var(--ac)}
@@ -155,7 +157,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(91,141,240,.03)}
 .sw{position:relative;display:inline-block}
 .sdrop{position:fixed;background:var(--s1);border:1px solid var(--bd2);border-radius:var(--r);z-index:9999;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:none;overflow:hidden}
 .sdrop.open{display:block}
-.so{padding:8px 12px;font-size:12px;cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.so{padding:8px 12px;font-size:15px;cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .so:hover{background:var(--s3)}.so .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .di{background:transparent;border:none;color:var(--ac2);font-size:9px;cursor:pointer;outline:none;width:88px}
 .di::-webkit-calendar-picker-indicator{filter:invert(.4);cursor:pointer}
@@ -314,6 +316,7 @@ var st,ct,ut,lt,dt,ht,pt,gt,ft,mt=function(){function t(e,t,r){this.networkInter
   <div class="nt" onclick="promptSettingsPassword()">Settings</div>
   <div class="nr">
     <span class="fy" id="fyLabel" style="cursor:pointer" onclick="openFYPicker()" title="Click to change Financial Year">FY 2025-26 ▾</span>
+    <button class="btn bo" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode" style="font-size:15px;padding:4px 10px">🌙</button>
     <button class="btn bo" onclick="dlTemplate()">⬇ Template</button>
     <button class="btn bo" onclick="exportMonthReport()">📊 Report</button>
     <button class="btn bsave" onclick="saveMonthExcel()">💾 Save Month</button>
@@ -828,9 +831,9 @@ function buildFYData(startYear) {
   const y1 = startYear, y2 = startYear + 1;
   const y1s = String(y1).slice(2), y2s = String(y2).slice(2);
   const months = [
-    {mo:3,l:'Apr'},{mo:4,l:'May'},{mo:5,l:'Jun'},{mo:6,l:'Jul'},
-    {mo:7,l:'Aug'},{mo:8,l:'Sep'},{mo:9,l:'Oct'},{mo:10,l:'Nov'},
-    {mo:11,l:'Dec'},{mo:0,l:'Jan '+y2s},{mo:1,l:'Feb '+y2s},{mo:2,l:'Mar '+y2s}
+    {mo:3,l:'Apr '+y1s},{mo:4,l:'May '+y1s},{mo:5,l:'Jun '+y1s},{mo:6,l:'Jul '+y1s},
+    {mo:7,l:'Aug '+y1s},{mo:8,l:'Sep '+y1s},{mo:9,l:'Oct '+y1s},{mo:10,l:'Nov '+y1s},
+    {mo:11,l:'Dec '+y1s},{mo:0,l:'Jan '+y2s},{mo:1,l:'Feb '+y2s},{mo:2,l:'Mar '+y2s}
   ];
   const MP = months.map(m => ({id: m.mo>=3?(m.l.slice(0,3)+y1s):(m.l.slice(0,3)+y2s), l: m.l, mo: m.mo}));
   const QP = [
@@ -1274,7 +1277,21 @@ function showToast(msg,col){let t=document.getElementById('toast');if(!t){t=docu
 // ══════════════════════════════════════════
 document.addEventListener('msalReady', tryAutoSignIn);
 // Also try on DOMContentLoaded in case script already loaded
+// ══════════════════════════════════════════
+//  THEME TOGGLE
+// ══════════════════════════════════════════
+function toggleTheme(){
+  const isDark=document.body.classList.toggle('dark');
+  document.getElementById('themeToggle').textContent=isDark?'☀️':'🌙';
+  try{localStorage.setItem('gst_theme',isDark?'dark':'light');}catch(e){}
+}
+// Restore saved theme
+(function(){try{if(localStorage.getItem('gst_theme')==='dark'){document.body.classList.add('dark');}}catch(e){}})();
+
 document.addEventListener('DOMContentLoaded', function() {
+  // Sync toggle icon with saved theme
+  try{if(localStorage.getItem('gst_theme')==='dark'){const t=document.getElementById('themeToggle');if(t)t.textContent='☀️';}}catch(e){}
+});
   document.getElementById('fyLabel').textContent = FY_LABEL + ' ▾';
   setTimeout(function() {
     if (typeof msal !== 'undefined') tryAutoSignIn();
