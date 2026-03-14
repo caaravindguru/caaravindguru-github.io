@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>GST Tracker — SharePoint Edition</title>
+<title>GST Tracker — PANDA</title>
 
 <!-- ════════════════════════════════════════════════════════
   CONFIGURATION — Edit these 4 values before uploading
@@ -1265,7 +1265,8 @@ function renderTracker(){
   const qe=isQEnd(aPT,aPi)&&aPT==='M';
   const filt=gFilt(),tot=filt.length,totPg=Math.max(1,Math.ceil(tot/PS));
   if(tp>totPg)tp=totPg;const page=filt.slice((tp-1)*PS,tp*PS);
-  document.getElementById('TH').innerHTML='<tr><th><input type="checkbox" id="SA" onchange="tAll(this)"/></th><th>#</th><th>Client</th><th>Freq</th><th>Batch</th>'+(qe?'<th style="color:var(--ac3)">Period ⚡</th>':'')+'<th>Deadline</th><th>Data Recv</th><th>Recv Time</th><th>'+aRT+' Status</th><th>Date Filed</th><th>Remarks</th><th>Actions</th></tr>';
+  const is2B=aRT==='GSTR-2B';
+  document.getElementById('TH').innerHTML='<tr><th><input type="checkbox" id="SA" onchange="tAll(this)"/></th><th>#</th><th>Client</th><th>Freq</th><th>Batch</th>'+(qe?'<th style="color:var(--ac3)">Period ⚡</th>':'')+'<th>'+(is2B?'Availability':'Deadline')+'</th>'+(is2B?'':'<th>Data Recv</th><th>Recv Time</th>')+'<th>'+aRT+' Status</th>'+(is2B?'':'<th>Date Filed</th>')+'<th>Remarks</th><th>Actions</th></tr>';
   if(!page.length){document.getElementById('TB').innerHTML='';document.getElementById('TE').style.display='block';}
   else{
     document.getElementById('TE').style.display='none';
@@ -1295,7 +1296,7 @@ function renderTracker(){
         actC='<button class="btn bo" style="font-size:9px;padding:3px 7px" onclick="openHist(\''+c.id+'\')" title="History">📋</button><button class="btn bo" style="font-size:9px;padding:3px 7px;margin-left:3px" onclick="openStmt(\''+c.id+'\')" title="Statement">🖨</button>';
       }
       const rowBg=c.urgent?'style="background:rgba(248,113,113,.03)"':qe&&c.freq==='Q'?'style="background:rgba(52,211,153,.025)"':'';
-      return '<tr id="tr'+c.id+'" data-cid="'+c.id+'" '+rowBg+'><td><input type="checkbox" '+(sel.has(c.id)?'checked':'')+' onchange="togSel(\''+c.id+'\',this)"/></td><td class="rn">'+gi+'</td><td><div style="display:flex;align-items:center;gap:5px"><span class="urg '+(c.urgent?'on':'off')+'" onclick="togUrg(\''+c.id+'\')" title="Toggle urgent">🔴</span><div><div class="cn">'+c.name+'</div><div class="cg2">'+c.gstin+'</div></div></div></td><td><span class="fb f'+c.freq+'">'+(c.freq==='M'?'Mon':'Qtr')+'</span></td><td>'+bL+'</td>'+periodCell+'<td>'+dlC+'</td><td>'+drC+'</td><td>'+tsC+'</td><td>'+stC+'</td><td>'+dofC+'</td><td>'+remC+'</td><td>'+actC+'</td></tr>';
+      return '<tr id="tr'+c.id+'" data-cid="'+c.id+'" '+rowBg+'><td><input type="checkbox" '+(sel.has(c.id)?'checked':'')+' onchange="togSel(\''+c.id+'\',this)"/></td><td class="rn">'+gi+'</td><td><div style="display:flex;align-items:center;gap:5px"><span class="urg '+(c.urgent?'on':'off')+'" onclick="togUrg(\''+c.id+'\')" title="Toggle urgent">🔴</span><div><div class="cn">'+c.name+'</div><div class="cg2">'+c.gstin+'</div></div></div></td><td><span class="fb f'+c.freq+'">'+(c.freq==='M'?'Mon':'Qtr')+'</span></td><td>'+bL+'</td>'+periodCell+'<td>'+dlC+'</td>'+(is2B?'':'<td>'+drC+'</td><td>'+tsC+'</td>')+'<td>'+stC+'</td>'+(is2B?'':'<td>'+dofC+'</td>')+'<td>'+remC+'</td><td>'+actC+'</td></tr>';
     }).join('');
     kbPageRows=page;applyKBFocus(page);
   }
