@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>GST Tracker- Panda </title>
+<title>GST Tracker-PANDA</title>
 
 <!-- ════════════════════════════════════════════════════════
   CONFIGURATION — Edit these 4 values before uploading
@@ -845,7 +845,7 @@ async function spSaveSettings(key, value) {
 // ══════════════════════════════════════════
 //  CONFIG / CONSTANTS
 // ══════════════════════════════════════════
-const RTS = ['GSTR-1','GSTR-3B','GSTR-2B'];
+const RTS = ['GSTR-1','GSTR-3B'];
 const SM = {
   'GSTR-1': ['Not Started','In Progress','Completed - Pending Review','Filed'],
   'GSTR-3B': ['Not Started','In Progress','Pending Review','Payment Pending','Filed'],
@@ -1273,8 +1273,8 @@ function renderTracker(){
   const qe=isQEnd(aPT,aPi)&&aPT==='M';
   const filt=gFilt(),tot=filt.length,totPg=Math.max(1,Math.ceil(tot/PS));
   if(tp>totPg)tp=totPg;const page=filt.slice((tp-1)*PS,tp*PS);
-  const is2B=aRT==='GSTR-2B';
-  document.getElementById('TH').innerHTML='<tr><th><input type="checkbox" id="SA" onchange="tAll(this)"/></th><th>#</th><th>Client</th><th>Freq</th><th>Batch</th>'+(qe?'<th style="color:var(--ac3)">Period ⚡</th>':'')+'<th>'+(is2B?'Availability':'Deadline')+'</th>'+(is2B?'':'<th>Data Recv</th><th>Recv Time</th>')+'<th>'+aRT+' Status</th>'+(is2B?'':'<th>Date Filed</th>')+'<th>Remarks</th><th>Actions</th></tr>';
+  const is3B=aRT==='GSTR-3B';
+  document.getElementById('TH').innerHTML='<tr><th><input type="checkbox" id="SA" onchange="tAll(this)"/></th><th>#</th><th>Client</th><th>Freq</th><th>Batch</th>'+(qe?'<th style="color:var(--ac3)">Period ⚡</th>':'')+'<th>Deadline</th>'+(is3B?'<th>GSTR-2B</th>':'')+'<th>Data Recv</th><th>Recv Time</th><th>'+aRT+' Status</th><th>Date Filed</th><th>Remarks</th><th>Actions</th></tr>';
   if(!page.length){document.getElementById('TB').innerHTML='';document.getElementById('TE').style.display='block';}
   else{
     document.getElementById('TE').style.display='none';
@@ -1282,11 +1282,12 @@ function renderTracker(){
       const p=qe?tGetPeriod(c):gPc(c);const gi=(tp-1)*PS+idx+1;
       const bL=c.batch>0?'<span class="bb">B'+c.batch+' '+pName(c.batch)+'</span>':'<span style="color:var(--mu2);font-size:9px">—</span>';
       let periodCell=qe?'<td><span style="font-size:9px;padding:2px 7px;border-radius:4px;font-weight:600;'+(c.freq==='Q'?'background:rgba(52,211,153,.1);color:var(--ac2);border:1px solid rgba(52,211,153,.25)':'background:rgba(91,141,240,.1);color:var(--ac);border:1px solid rgba(91,141,240,.25)')+'">'+(p?p.l:'N/A')+(c.freq==='Q'?' (QRMP)':'')+'</span></td>':'';
-      let stC='',drC='',tsC='',dofC='',remC='',dlC='',actC='';
-      if(!p){stC='<span style="color:var(--mu2);font-size:9px">N/A</span>';drC=tsC=dofC='<span style="color:var(--mu2);font-size:9px">—</span>';remC='—';dlC='';}
+      let stC='',drC='',tsC='',dofC='',remC='',dlC='',actC='',g2bC='';
+      if(!p){stC='<span style="color:var(--mu2);font-size:9px">N/A</span>';drC=tsC=dofC='<span style="color:var(--mu2);font-size:9px">—</span>';remC='—';dlC='';g2bC='<span style="color:var(--mu2);font-size:9px">—</span>';}
       else{
         const f=gF(c,aRT,p.id),dr=f.dr||'No';const filed=isFin(aRT,f.st);
         dlC=deadlineTag(aRT,c.freq,p.id,filed);
+        if(is3B){const f2b=gF(c,'GSTR-2B',p.id);const g2bSt=f2b.st||'Pending';const g2bDid='dp2b'+c.id+p.id;const g2bOpts=SM['GSTR-2B'].map(s=>'<div class="so" onclick="setSt(\''+c.id+'\',\'GSTR-2B\',\''+p.id+'\',this.dataset.s)" data-s="'+s+'"><span class="dot" style="background:'+SDC[s]+'"></span>'+s+'</div>').join('');g2bC='<div class="sw"><span class="sp '+(SC[g2bSt]||'s0')+'" onclick="togDrop(\''+g2bDid+'\',event)"><span class="d" style="background:'+SDC[g2bSt]+'"></span>'+g2bSt+'</span><div class="sdrop" id="'+g2bDid+'">'+g2bOpts+'</div></div>';}
         drC='<span class="dr '+(dr==='Yes'?'dry':'drn')+'" onclick="togDR(\''+c.id+'\',\''+aRT+'\',\''+p.id+'\')">'+dr+'</span>';
         tsC=dr==='Yes'&&f.drTs?'<div class="ts-cell has-ts">'+f.drTs+'</div>':'<div class="ts-cell">—</div>';
         const did2='dp'+c.id+aRT.replace(/\W/g,'')+p.id;
@@ -1304,7 +1305,7 @@ function renderTracker(){
         actC='<button class="btn bo" style="font-size:9px;padding:3px 7px" onclick="openHist(\''+c.id+'\')" title="History">📋</button><button class="btn bo" style="font-size:9px;padding:3px 7px;margin-left:3px" onclick="openStmt(\''+c.id+'\')" title="Statement">🖨</button>';
       }
       const rowBg=c.urgent?'style="background:rgba(248,113,113,.03)"':qe&&c.freq==='Q'?'style="background:rgba(52,211,153,.025)"':'';
-      return '<tr id="tr'+c.id+'" data-cid="'+c.id+'" '+rowBg+'><td><input type="checkbox" '+(sel.has(c.id)?'checked':'')+' onchange="togSel(\''+c.id+'\',this)"/></td><td class="rn">'+gi+'</td><td><div style="display:flex;align-items:center;gap:5px"><span class="urg '+(c.urgent?'on':'off')+'" onclick="togUrg(\''+c.id+'\')" title="Toggle urgent">🔴</span><div><div class="cn">'+c.name+'</div><div class="cg2">'+c.gstin+'</div></div></div></td><td><span class="fb f'+c.freq+'">'+(c.freq==='M'?'Mon':'Qtr')+'</span></td><td>'+bL+'</td>'+periodCell+'<td>'+dlC+'</td>'+(is2B?'':'<td>'+drC+'</td><td>'+tsC+'</td>')+'<td>'+stC+'</td>'+(is2B?'':'<td>'+dofC+'</td>')+'<td>'+remC+'</td><td>'+actC+'</td></tr>';
+      return '<tr id="tr'+c.id+'" data-cid="'+c.id+'" '+rowBg+'><td><input type="checkbox" '+(sel.has(c.id)?'checked':'')+' onchange="togSel(\''+c.id+'\',this)"/></td><td class="rn">'+gi+'</td><td><div style="display:flex;align-items:center;gap:5px"><span class="urg '+(c.urgent?'on':'off')+'" onclick="togUrg(\''+c.id+'\')" title="Toggle urgent">🔴</span><div><div class="cn">'+c.name+'</div><div class="cg2">'+c.gstin+'</div></div></div></td><td><span class="fb f'+c.freq+'">'+(c.freq==='M'?'Mon':'Qtr')+'</span></td><td>'+bL+'</td>'+periodCell+'<td>'+dlC+'</td>'+(is3B?'<td>'+g2bC+'</td>':'')+'<td>'+drC+'</td><td>'+tsC+'</td><td>'+stC+'</td><td>'+dofC+'</td><td>'+remC+'</td><td>'+actC+'</td></tr>';
     }).join('');
     kbPageRows=page;applyKBFocus(page);
   }
